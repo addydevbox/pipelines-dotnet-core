@@ -1,0 +1,30 @@
+name: Conditional Script Execution
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  check-os:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run script on Linux
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          echo "This is a script running on Linux"
+          # Add your Linux-specific script here
+
+      - name: Run script on Windows
+        if: matrix.os == 'windows-latest'
+        run: |
+          echo "This is a script running on Windows"
+          # Add your Windows-specific script here
