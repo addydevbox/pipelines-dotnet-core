@@ -1,0 +1,22 @@
+name: CI Workflow
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-linux:
+    runs-on: [self-hosted, linux, label-linux]
+    if: github.event_name == 'push' || github.event_name == 'pull_request'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+  build-windows:
+    runs-on: [self-hosted, windows, label-windows]
+    if: github.event_name == 'push' || github.event_name == 'pull_request'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
