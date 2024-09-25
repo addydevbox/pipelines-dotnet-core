@@ -1,0 +1,51 @@
+name: CI Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      os:
+        description: 'Choose the operating system'
+        required: true
+        default: 'ubuntu-latest'
+        type: choice
+        options:
+          - ubuntu-latest
+          - windows-latest
+          - macos-latest
+
+jobs:
+  build:
+    runs-on: ${{ github.event.inputs.os }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Install dependencies on Ubuntu
+      if: runner.os == 'Linux'
+      run: npm install
+
+    - name: Install dependencies on Windows
+      if: runner.os == 'Windows'
+      run: npm install
+
+    - name: Install dependencies on macOS
+      if: runner.os == 'macOS'
+      run: npm install
+
+    - name: Run tests on Ubuntu
+      if: runner.os == 'Linux'
+      run: npm test
+
+    - name: Run tests on Windows
+      if: runner.os == 'Windows'
+      run: npm test
+
+    - name: Run tests on macOS
+      if: runner.os == 'macOS'
+      run: npm test
