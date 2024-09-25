@@ -1,4 +1,4 @@
-name: CI Workflow Workflow Dispatch
+name: CI Workflow .NET Workflow Dispatch
 
 on:
   workflow_dispatch:
@@ -21,31 +21,43 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
       with:
-        node-version: '14'
+        dotnet-version: '6.0'
 
-    - name: Install dependencies on Ubuntu
+    - name: Restore NuGet packages on Ubuntu
       if: runner.os == 'Linux'
-      run: npm install
+      run: dotnet restore
 
-    - name: Install dependencies on Windows
+    - name: Restore NuGet packages on Windows
       if: runner.os == 'Windows'
-      run: npm install
+      run: dotnet restore
 
-    - name: Install dependencies on macOS
+    - name: Restore NuGet packages on macOS
       if: runner.os == 'macOS'
-      run: npm install
+      run: dotnet restore
 
-    - name: Run tests on Ubuntu
+    - name: Build on Ubuntu
       if: runner.os == 'Linux'
-      run: npm test
+      run: dotnet build --configuration Release --no-restore
 
-    - name: Run tests on Windows
+    - name: Build on Windows
       if: runner.os == 'Windows'
-      run: npm test
+      run: dotnet build --configuration Release --no-restore
 
-    - name: Run tests on macOS
+    - name: Build on macOS
       if: runner.os == 'macOS'
-      run: npm test
+      run: dotnet build --configuration Release --no-restore
+
+    - name: Test on Ubuntu
+      if: runner.os == 'Linux'
+      run: dotnet test --no-restore --verbosity normal
+
+    - name: Test on Windows
+      if: runner.os == 'Windows'
+      run: dotnet test --no-restore --verbosity normal
+
+    - name: Test on macOS
+      if: runner.os == 'macOS'
+      run: dotnet test --no-restore --verbosity normal
